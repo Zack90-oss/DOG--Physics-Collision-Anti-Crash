@@ -43,7 +43,7 @@ DOG.ACrash.CPTValues["UnScrew"] = 30
 DOG.ACrash.CPTValues["Phys"] = 150
 DOG.ACrash.CPTValues["Effective"] = 400
 DOG.ACrash.CPTValues["CleanUp"] = 600
-DOG.ACrash.CPTValues["Restart"] = 800
+DOG.ACrash.CPTValues["Restart"] = 2000
 
 DOG.ACrash.CPTValues["EntPhys"] = 20
 --//
@@ -54,6 +54,8 @@ DOG.ACrash.Con_ExpEnabled = CreateConVar("acdog_experemental", 0, bit.bor(FCVAR_
 DOG.ACrash.Con_FixValMul = CreateConVar("acdog_fixvaluesmul", 1, bit.bor(FCVAR_ARCHIVE), "Constant Mul, Do not screw up this one or you may suffer constant restarts", 0.5)
 
 DOG.ACrash.Con_ChatEnabled = CreateConVar("acdog_chat", 1, bit.bor(FCVAR_ARCHIVE), "Enable/Disable Dog saying things in chat")
+
+DOG.ACrash.Con_ViolatorChatEnabled = CreateConVar("acdog_violator_chat", 1, bit.bor(FCVAR_ARCHIVE), "Enable/Disable Dog saying whose props (may) violate the physics engine")
 
 DOG.ACrash.ConVars = DOG.ACrash.ConVars or {}
 for val, cpt in pairs(DOG.ACrash.CPTValues)do
@@ -67,7 +69,12 @@ function DOG.ACrash:GetCPSConstantCompareMul()
 end
 
 function DOG.ACrash:GetPhysMeshCount(phys)
-	return #phys:GetMesh()
+	local mes = phys:GetMesh()
+	if(mes)then
+		return #phys:GetMesh()
+	else
+		return 1
+	end
 end
 
 DOG.ACrash.CountFunc = function(ent,colldata)	
